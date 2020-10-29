@@ -18,6 +18,11 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
+#include <X11/XF86keysym.h>
+static const char *mutecmd[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
+static const char *volupcmd[] = { "amixer", "-q", "set", "Master", "5%+", "unmute", NULL };
+static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unmute", NULL };
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -65,6 +70,12 @@ static const char *termcmd[]  = { "st", NULL };
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ MODKEY,                       XK_F11, spawn, {.v = voldowncmd } },
+	{ MODKEY,                       XK_F9,  spawn, {.v = mutecmd } },
+	{ MODKEY,                       XK_F12, spawn, {.v = volupcmd   } },
+	{ 0, XF86XK_AudioMute, spawn, {.v = mutecmd } },
+        { 0, XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd } },
+        { 0, XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd } },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -117,6 +128,7 @@ static Key keys[] = {
 	{ MODKEY,			XK_w,	   spawn,   SHCMD("$BROWSER") },
 	{ MODKEY|ShiftMask,		XK_m,	   spawn,   SHCMD("env LD_PRELOAD=/usr/lib/spotify-adblock.so spotify %U") },
 };
+
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
